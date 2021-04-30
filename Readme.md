@@ -1,4 +1,4 @@
-![Alt Text](https://github.com/mmoussaguim/Actor_Racket/Peek 15-05-2020 19-31.gif)
+![](Peek 15-05-2020 19-31.gif)
 
 # Introduction
 
