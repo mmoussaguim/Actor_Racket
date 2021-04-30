@@ -1,3 +1,5 @@
+![Alt Text](https://github.com/mmoussaguim/Actor_Racket/Peek 15-05-2020 19-31.gif)
+
 # Introduction
 
 ​	This project represents an implementation in `Racket` language of an actor model named Acting shooting star.
@@ -47,5 +49,7 @@ make # to generate a pdf version of the report
 make clean # to remove the generated files after the compilation
 make cleanall # to establish the initial state of the report repository
 ```
+
+
 
  
