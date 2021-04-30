@@ -1,0 +1,73 @@
+\section{Structure du Jeu}
+
+Dans l'environnement du jeu se trouvent différents types d'acteurs qui interagissent entre eux en s'envoyant différents types de messages. Pour  une bonne hiérarchisation une horloge de synchronisation découpe le temps en intervalle. A chaque pas de l'horloge, les acteurs reçoivent leurs messages et se mettent à jour en fonction de ce qu'ils ont reçu en attendant le prochain pas de l'horloge.
+
+\subsection{Répresentation des acteurs}
+Un acteur est représenté par une structure de données nommée \textbf{Actor} et il est caractérisé par son nom, sa position (x,y) dans l'espace du jeu et sa durée de vie.
+Il faut savoir que les messages sont envoyés de manière asynchrone aux acteurs et ces derniers les traitent séquentiellement; d'où la nécessité d'avoir une boîte de messages \textbf{mailbox} où ils peuvent stocker les différents messages.
+En outre, les acteurs sont de deux sortes: les vaisseaux et les missiles. Cependant on distingue quatre types d'acteurs à savoir : 
+\\
+
+\begin{itemize}
+
+    \item les vaisseaux alliés \textbf{ally-ship}: il existe généralement un seul vaisseau allié, qui est le vaisseau principal. Son objectif est d'attaquer et de détruire les autres vaisseaux \textbf{ennemy-ship}
+    \item les vaisseaux ennemis: c'est une masse de vaisseaux qui sort de manière aléatoire du coté ennemis et envahit le vaisseau allié. 
+    \item les missiles alliés \textbf{ally-missile}: Ce sont les acteurs créées par le vaisseau allié, qui lorsqu'ils entrent en collision avec les acteurs ennemis les détruisent et meurt également.
+    \item les missiles ennemis \textbf{ennemy-missile}: Ceux là sont créées par les vaisseaux ennemis et ont le même rôle que ceux cités précédemment; celui de tuer ou de réduire la durée de vie du vaisseau principal. 
+    \\
+\end{itemize}
+
+A ceux là s'ajoutent deux autres types d'acteurs:
+\\
+
+\begin{itemize}
+    \item les acteurs \textbf{obstacle} qui lorsqu'ils rencontrent le vaisseau allié, diminuent sa durée de vie.
+    \item les acteurs \textbf{bonus} qui ont pour rôle d'augmenter la durée de vie du vaisseau allié.
+\end{itemize}
+
+Ainsi un acteur est représenté de la manière suivante: 
+
+\begin{lstlisting}[language={lisp},captionpos=b, frame=single]
+(struct concrete-actor (name location mailbox type health))
+\end{lstlisting}
+
+Pour en créer un dans l'espace du jeu, une fonction nommée \textbf{make-actor} qui prend comme paramètre la position et le type de l'acteur, est implémentée. Elle est utilisée par \textbf{(generate-actor tick)} qui crée des acteurs ennemis , obstacles et bonus. A un pas \textbf{tick} donné, elle génère une liste des acteurs avec des ordonnées différentes aléatoires mais avec une même abscisse qui est celle de l'extrémité droite du cadre du jeu; sachant qu'ils se dirigent tous vers l'acteur principal.
+
+\subsection{Représentation et traitement des messages}
+
+Il existe différentes formes de messages en fonction de l'information que l'on souhaite transmettre aux acteurs:
+\begin{itemize}
+    \item un message \textbf{('move x y)} permet à l'acteur visé de se déplacer de (x, y) dans l'espace du jeu.
+    \item un message \textbf{('Collide)} qui peut prendre plusieurs formes. Il dépend des types d'acteurs qui se rencontrent.
+    \item un message \textbf{('shoot "-")} qui est envoyé soit au vaisseau principal soit aux vaisseaux ennemis pour pouvoir créer des missiles. 
+\end{itemize}
+
+Ces messages sont envoyés à un \textbf{actor} par la fonction \textbf{actor-send} qui retourne alors un nouvel \textbf{actor} contenant le message dans sa \textbf{mailbox}.
+
+Vient alors la fonction \textbf{actor-update} qui met à jour les \textbf{actor} en vidant la \textbf{mailbox}. Pour ce faire, la fonction s'appelle récursivement en modifiant l'\textbf{actor} à l'aide d'autres fonctions appelées en fonction du message.
+
+\begin{lstlisting}[language={lisp},captionpos=b, frame=single]
+(actor-send actor message)
+(actor-update actor)
+\end{lstlisting}
+
+\subsubsection{Move}
+Le message \textbf{move} est géré par deux fonctions, la première :
+\begin{lstlisting}[language={lisp},captionpos=b, frame=single]
+(actor-move actor mvnt)
+\end{lstlisting}
+prend en paramètre un \textbf{actor} et le mouvement (\textbf{mvnt}) à lui faire réaliser. Ce mouvement est représenté par une liste de deux coordonnées représentant le vecteur du déplacement.
+
+Vient alors l'autre fonction :
+\begin{lstlisting}[language={lisp},captionpos=b, frame=single]
+(sum-pair-list p l)
+\end{lstlisting}
+Cette fonction permet de sommer la liste représentant le mouvement et la position de l'\textbf{actor} qui est une \textbf{pair}.
+
+\subsubsection{Collide}
+Il y a plusieurs messages pour les collisions chacun correspond à un type de collision entre le vaisseau allié et un autre \textbf{actor}.
+
+Chaque fonction permet une réaction différente en fonction du type de l'\textbf{actor} rencontré et ainsi soit détruire le vaisseau, soit lui réduire sa durée de vie.
+
+\subsubsection{Shoot}
+Le message de tire est géré par la fonction \textbf{actor-shoot} qui en fonction du type de l'\textbf{actor} donné en paramètre, créé alors un missile allié ou ennemie à l'avant de l'actor.

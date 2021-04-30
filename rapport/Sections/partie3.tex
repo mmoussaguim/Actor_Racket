@@ -1,0 +1,19 @@
+\section{Tests et documentation du projet}
+\subsection{Les tests}
+Les tests pour ce projet ont été réalisés à l'aide de la bibliothèque \texttt{rackunit}. Il sont décomposés en 3 fichiers. Chaque fichier contient une \texttt{test-suite}:
+\begin{itemize}
+    \item Un fichier \texttt{test-actor.rkt}: teste les fonctions du fichier \texttt{actor.rkt}. Les fonctions testées sont \texttt{actor-location}, \texttt{actor-send} et \texttt{actor-update}.
+    \item Un fichier \texttt{test-world.rkt} pour tester les fonctions \texttt{world-send}, \texttt{actors-collision} et \texttt{world-update} du fichier \texttt{world.rkt}.
+    \item Un dernier fichier \texttt{test-runtime.rkt} pour tester les deux fonctions \texttt{runtime-send} et \texttt{runtime-update}.
+\end{itemize}
+La commande \texttt{make test} permet d'exécuter l'ensemble de ces fichiers et afficher les résultats des tests.
+\subsection{Documentation}
+
+La documentation de ce projet est réalisée avec \textbf{Scribble} qui est un outil de description ressemblant au langage \LaTeX. Les fichiers écrits avec cet outil  en plus du fichier principal \texttt{doc.scrbl} sont les suivants:
+\begin{itemize}
+    \item Un fichier \texttt{actor.scrbl} pour décrire le code du fichier \texttt{actor.rkt}.
+    \item Un fichier \texttt{world.scrbl} contenant la documentation des fonctions et structures de \texttt{world.rkt}.
+    \item Un fichier \texttt{runtime.scrbl} qui montre le fonctionnement du code de \texttt{runtime.rkt}.
+\end{itemize}
+La commande pour générer la documentation est \texttt{make doc}.
+Cette commande permet de générer plusieurs fichiers et les mettre dans le répertoire \texttt{doc}. Pour visualiser la documentation, il suffit d'ouvrir le fichier \texttt{doc.html}.

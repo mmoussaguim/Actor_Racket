@@ -1,0 +1,11 @@
+========
+SEANCE DE 10/03/2020:
+
++ Création du ficher Makefile (Mamadou)
++ Implémentation des fonction de Actor + providers (Hugo)
++ Tests unitaires sur les fonctions de Actor (Jalal)
++ Implémentation des fonction de World + providers (Mohamed Fayçal)
++ Tests unitaires sur les fonctions de World (Jalal + Mamadou)
+
+========
+SEANCE DE 17/03/2020:
