@@ -2,6 +2,7 @@
 
 # Introduction
 
+
 ​	This project represents an implementation in `Racket` language of an actor model named Acting shooting star.
 
 # Authors
